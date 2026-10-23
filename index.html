@@ -1,0 +1,513 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Learning Hub</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6fb;
+            color: #20243a;
+        }
+
+        header {
+            background: #202b52;
+            color: white;
+            padding: 25px 8%;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #dbe3ff;
+        }
+
+        .search-box {
+            text-align: center;
+            padding: 25px 15px;
+        }
+
+        .search-box input {
+            width: 90%;
+            max-width: 550px;
+            padding: 14px;
+            border: 1px solid #ccd2e2;
+            border-radius: 10px;
+            font-size: 16px;
+            outline-color: #5668d8;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding-bottom: 40px;
+        }
+
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit, minmax(250px, 1fr)
+            );
+            gap: 22px;
+        }
+
+        .topic-card {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px #202b5210;
+            border: 1px solid #e5e8f1;
+            transition: 0.3s;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 22px #202b5220;
+        }
+
+        .topic-card h2 {
+            font-size: 21px;
+            margin-bottom: 10px;
+            color: #293967;
+        }
+
+        .topic-card p {
+            color: #737b91;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .topic-card button {
+            width: 100%;
+            background: #5265d8;
+            color: white;
+            padding: 11px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .topic-card button:hover {
+            background: #394bb9;
+        }
+
+        .subtopics {
+            display: none;
+            margin-top: 18px;
+        }
+
+        .subtopics a {
+            display: block;
+            color: #394bb9;
+            text-decoration: none;
+            background: #f0f2ff;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .subtopics a:hover {
+            background: #dfe4ff;
+        }
+
+        .empty-message {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            color: #737b91;
+        }
+
+        footer {
+            background: #202b52;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer p {
+            color: #dbe3ff;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>DSA Learning Hub</h1>
+        <p>Your complete Data Structures practical library</p>
+    </header>
+
+    <div class="search-box">
+        <input
+            type="text"
+            id="search"
+            placeholder="Search topics or subtopics..."
+            oninput="searchTopics()"
+        >
+    </div>
+
+    <main class="container">
+        <div class="topic-grid" id="topicGrid"></div>
+        <div class="empty-message" id="emptyMessage">
+            No topics found. Try another search.
+        </div>
+    </main>
+
+    <footer>
+        <h3>DSA Learning Hub</h3>
+        <p>Learn • Practice • Improve</p>
+        <p style="margin-top: 8px;">HTML | CSS | JavaScript</p>
+    </footer>
+
+    <script>
+        // Replace # links with your own Google Drive or tutorial URLs.
+        const topics = [
+            {
+                name: "single dimention array",
+                icon: "📊",
+                description: "Array operations and programs",
+                subtopics: [
+                    ["1. ", "https://docs.google.com/document/d/1YaAVpbLgGakRLqeC9kyV5kgp95n1JWqNP2JmAFJKfzg/edit?tab=t.0"],
+                    ["2.", "https://docs.google.com/document/d/1tMrah9EwPEjZ_EWVAD1TMqMJ0AIw8yQ7UwqhCptOsYU/edit?tab=t.0"],
+                    ["3.", "https://docs.google.com/document/d/1EXb4TdV3LsZiNzAAOnfmh-cMCLH9eKJJ4c_lEOPXjMg/edit?tab=t.0"],
+                    ["4.", "https://docs.google.com/document/d/1PMV8Z7mp0I-WmC4O_Gi6cgGz3saLde_nekheF6k8pRY/edit?tab=t.0"],
+                    ["5.", "https://docs.google.com/document/d/1qZBMK_VrW7VgfNWXuPZl48Xnpy_7ZrwhRIruXWs92aw/edit?tab=t.0"],
+                     ["6. ", "https://docs.google.com/document/d/10Tb8brvtUZlvMilkxC6o8DQxsHdlFWukzKlpH8nIs0Q/edit?tab=t.0"],
+                    ["7.", "https://docs.google.com/document/d/1EKORfKUxrQ1Ag113-qEZJ347Z-OyUSHZJBnB6qKGgfY/edit?tab=t.0"],
+                    ["8.", "https://docs.google.com/document/d/15_XA9nIW48bjm422HdmgnPtiWKTKxgfQoEay_9IZ1OA/edit?tab=t.0"],
+                    ["9.", "https://docs.google.com/document/d/1d0z_k0Nuz0gnIMtmiO-jiQCq_34SSWJaQzdKCBfBDrs/edit?tab=t.0"],
+                    ["10.", "https://docs.google.com/document/d/1d7b6WdCFv06IC_Jl-JkwCm7-YxeKxh2-ue_NkEXWCpE/edit?tab=t.0"],
+                     ["11.", "https://docs.google.com/document/d/1MhiTC7uNnIq2JUSVQPgWNziUf3pU02n1IvjFyFDuv4s/edit?tab=t.0"],
+                    ["12.", "https://docs.google.com/document/d/1-9DXxU6Xsz99JKRS-W9KNp8eGKlsovwgucRghd-Itkw/edit?tab=t.0"],
+                     ["13.", "https://docs.google.com/document/d/1EIw04nMCHKnuvaO31ezuk2b2WoTzFMFNSYJCleMLIuU/edit?tab=t.0"],
+                    ["14.", "https://docs.google.com/document/d/1rRoDIw9PI57TcaCfJfTfML3VGiV4T72VbRVbpksN3WE/edit?tab=t.0"],
+                     ["15.", "https://docs.google.com/document/d/1OOxQdyLKFRvgqayMktQOPe6HghyYb622bcLPpzhYjjA/edit?tab=t.0"],
+                    ["16.", "https://docs.google.com/document/d/1VMwXky7w7h3CcPIFNKnOWEbT3IeShf4OrTvFcRyF0HU/edit?tab=t.0"],
+                     ["17.", "https://docs.google.com/document/d/1ylzGJ3rvyYkiP6OksWIlSVuuYI-_RUJcK95hTZvIa7Y/edit?tab=t.0"],
+                    ["18.", "https://docs.google.com/document/d/1_G_VEe7hhfTQnLrBx7YFN3WdxC3ROqqclkfm7HFuTOI/edit?tab=t.0"],
+                     ["19.", "https://docs.google.com/document/d/1pWIOk63uhCTewLcAuE0K7fokkyYOAQnWbXGP3NicyCA/edit?tab=t.0"],
+                    ["20.", "https://docs.google.com/document/d/1zEaa12cAwpt-usL9zpmTflJX0FyrtgbVtf-jK66a_KQ/edit?tab=t.0"],
+                ]
+            },
+            {
+                name: "Strings",
+                icon: "🔤",
+                description: "String manipulation programs",
+                subtopics: [
+                    ["1.", "https://docs.google.com/document/d/1o3iv3lsb4nDitgEWPiSqCVStC4VVI9_vp73Q0m-2ynE/edit?tab=t.0"],
+                    ["2.", "https://docs.google.com/document/d/1OKU3C2lmmhTLWVl4db1NOos-hpRsRvwI73reXFNp-XI/edit?tab=t.0"],
+                    ["3.", "https://docs.google.com/document/d/13lxQp-gfYQIpUjEM3lUGBI8__xxlSd9bedwhQLjLlKc/edit?tab=t.0"],
+                    ["4.", "https://docs.google.com/document/d/1Xtk2huteNCePH6p2QsaUFAP3p3Rb3wvyIu3KCiMBwSE/edit?tab=t.0"],
+                    ["5.", "https://docs.google.com/document/d/17sTFQJMTbcG-vDW7r1A1-A-6fTa8DZSaELegKL0Qhm4/edit?tab=t.0"],
+                      ["6.", "https://docs.google.com/document/d/1idKu5oorCb2vVA3nwDJ8lXxsvGhshCk_TRPecLuWRIU/edit?tab=t.0"],
+                    ["7.", "https://docs.google.com/document/d/1BwRr9Yskaz_Qws-i85gARxQEjxYwbD9rcmx10vIHi-I/edit?tab=t.0"],
+                    ["8.", "https://docs.google.com/document/d/1Yin9Vt4-amaA2vKAFFKQfrccULny3Wc4dvXH1B22q_8/edit?tab=t.0"],
+                    ["9.", "https://docs.google.com/document/d/1oClnuaa9SSJMbM25beG60DR3_q-Tx6mPIdnn2HhCnF8/edit?tab=t.0"],
+                    ["10.", "https://docs.google.com/document/d/1QOnYpzyXYU_wkje1srUP6zfZrxiR7ZbfpU98QQBuHgI/edit?tab=t.0"],
+                      ["11.", "https://docs.google.com/document/d/1K7qqpg3JDrPYYAOsFvDC2lLvUgq-z1HGFnN7N08t4P4/edit?tab=t.0"],
+                    ["12.", "https://drive.google.com/file/d/1kvn9TqO_BAqQwdWTjDk1RIXQUdA1e7wV/view?usp=drive_link"],
+                    ["13.", "https://drive.google.com/file/d/1PieUmrxobbaXtQwJ0apDWTdtqWjZOx8M/view?usp=drive_links"],
+                    ["14.", "https://drive.google.com/file/d/1h-Tp98UABjru45JYL4_Tkb1VuZk1aSBG/view?usp=drive_link"],
+                    ["15.", "https://drive.google.com/file/d/1_8hTRVtNu7eAarGwil8fjUeJuXYfPm1D/view?usp=drive_link"],
+                      ["16.", "https://drive.google.com/file/d/1PBNuQxHAurCxnmQlWUp1FZRqC2eeYdsY/view?usp=drive_link"],
+                    ["17.", "https://drive.google.com/file/d/1sZTIWXo9UxJUKgfmstJ9hhJYvyDlcM8m/view?usp=drive_link"],
+                    ["18.", "https://drive.google.com/file/d/1rYm_MhVcLChmNv7i0ZTHVlXDeibNQt7V/view?usp=drive_link"],
+                    ["19.", "https://drive.google.com/file/d/1EBkgE3WpkxJfmq8llGaoNAWuwfC1GJQh/view?usp=drive_link"],
+                    ["20.", "https://drive.google.com/file/d/1k9N1ZRXeH-K5-1I4fpaJ88Uu0ed4tJtw/view?usp=drive_link"],
+                      ["21.", "https://drive.google.com/file/d/1cg6hNeNjSU4_VPgizbV-NmlEX4199KIT/view?usp=drive_link"],
+                    ["22.", "https://drive.google.com/file/d/1clMSXQgJWStfE4GvNUkd88-42NN0iepN/view?usp=drive_link"],
+                    ["23.", "https://drive.google.com/file/d/1nIr8kiLWQXROxgIDTGT11Ecsych8Q5y3/view?usp=drive_link"],
+                    ["24.", "https://drive.google.com/file/d/178_8OAoVTQk-67nNjzZsASsY5s4iUezN/view?usp=drive_link"],
+                    ["25.", "https://drive.google.com/file/d/1fKgAyY4dMMg9OvhlUQbM0Aftn2db8ZNE/view?usp=drive_link"],
+                      ["26.", "https://drive.google.com/file/d/1pw9KYk0wKBk_SB1teYO8kugXTT_zUVix/view?usp=drive_link"],
+                    ["27.", "https://drive.google.com/file/d/1OVFDesxfu0WeQOsn3ie7dWk43t5UQPez/view?usp=drive_link"],
+                    ["28.", "https://drive.google.com/file/d/14eTBUYaE6Z7oY2RkFVTRODxwsJ5IuKS2/view?usp=drive_link"],
+                    ["29.", "https://drive.google.com/file/d/1aotu5geTGxb8fWY2MFa3DZGtYTJOw3_E/view?usp=drive_link"],
+                    
+                ]
+            },
+            {
+                name: "Linked List",
+                icon: "🔗",
+                description: "Dynamic linear data structures",
+                subtopics: [
+                    ["1.", "https://drive.google.com/file/d/1Cx7g64nroWuf0yS1aUNn--TQByG5lTSY/view?usp=drive_link"],
+                    ["2.", "https://drive.google.com/file/d/1kEXyvXp60SN4jtwSKre65sqkc-0N9yET/view?usp=drive_link"],
+                    ["3.", "https://drive.google.com/file/d/1weIkYBWBemsVEYhbnCNdeMNlf5TyBAf6/view?usp=drive_link"],
+                    ["4.", "https://drive.google.com/file/d/1zOwKD_fTrhluk8L2Pv4GOZXbUZhrAOTo/view?usp=drive_link"],
+                    ["5.", "https://drive.google.com/file/d/1FijpPZqB860mNPToqY_uvXTKhlPxCWSg/view?usp=drive_link"],
+                      ["6.", "https://drive.google.com/file/d/1ocggTNhwViSG8JzJCVB8KxQl9pK77W3y/view?usp=drive_link"],
+                    ["7.", "https://drive.google.com/file/d/1yGLG3XAX45NJrbPBH6QzkhBlluEnawCB/view?usp=drive_link"],
+                    ["8.", "https://drive.google.com/file/d/1ihVyMv_eagXVA3-9f6c9wgz3rWFzBFc9/view?usp=drive_link"],
+                    ["9.", "https://drive.google.com/file/d/18p5uZ2o_fWE5odNYD75qMgXX82xeDyI6/view?usp=drive_link"],
+                ["10.", "https://drive.google.com/file/d/1L0mF9mWz8J4r1gL9u2ST0ghKwJ4OfB5t/view?usp=drive_link"],
+                ["11.", "https://drive.google.com/file/d/1XhihawufY8EFI67L4YcGuqovaaOjI8Jm/view?usp=drive_link"],
+                ]
+            },
+            {
+                name: "Stack",
+                icon: "📚",
+                description: "LIFO data structure",
+                subtopics: [
+                    ["1.", "https://drive.google.com/file/d/1OBMjB9OdsyfI75JbIRvg4drGnqDvjwz9/view?usp=drive_link"],
+                    ["2.", "https://drive.google.com/file/d/1Ty_4K4cCrRoQfchyjW-RrAntNkIltBwK/view?usp=drive_link"],
+                    ["3.", "https://drive.google.com/file/d/1SH3v29N94TnhRGYSHk8E5nyjHM-bArB5/view?usp=drive_link"],
+                    ["4.", "https://drive.google.com/file/d/18Am0eCAf43VpLOH1ni7eElv54ZjGV_dp/view?usp=drive_link"],
+                    ["5.", "https://drive.google.com/file/d/1mm5KVa8JWWh3UCt6FmmTbH1NOAx70WSm/view?usp=drive_link"],
+                     ["6.", "https://drive.google.com/file/d/1WFnzjIU15R1yLX8eYwflqyod8Vq4OX0T/view?usp=drive_link"],
+                      ["7.", "https://drive.google.com/file/d/1_EyH3PZ_c2p-oX9XeWLFLAkXO97B0EX7/view?usp=drive_link"],
+                    ["8.", "https://drive.google.com/file/d/1TB4hFEPPNd1LiBdzYc6_16sLqR-gJpgm/view?usp=drive_link"],
+                    ["9.", "https://drive.google.com/file/d/1SSr7-oXlj9KpjzqWoh9PYXw90-XIwfa_/view?usp=drive_link"],
+                    ["10.", "https://drive.google.com/file/d/1bj4R3E_K6nZzY0fDv9Bq3DuY6XiV5nKo/view?usp=drive_link"],
+                      ["11.", "https://drive.google.com/file/d/1otqkARPitDUnVHvuW7JtrPZ7L_gUvPJw/view?usp=drive_link"],
+                      ["12.", "https://drive.google.com/file/d/1U9N8X_2yDDWc4TeiZDZKeyd8tzQcl78J/view?usp=drive_link"],
+                    ["13.", "https://drive.google.com/file/d/1rCRDO_3Y3AFNI78C0E3PTFeoK_Ge1Rzh/view?usp=drive_link"],
+                ]
+            },
+            {
+                name: "Queue",
+                icon: "🚶",
+                description: "FIFO data structure",
+                subtopics: [
+                    ["1.", "https://drive.google.com/file/d/1pjxMnVjQphvE0ZnRNB_wrhwBxXATRH77/view?usp=drive_link"],
+                    ["2.", "https://drive.google.com/file/d/1xG3dBG8iy4E0SbEw2Wh6AThpnUDlm-6c/view?usp=drive_link"],
+                    ["3.", "https://drive.google.com/file/d/1xmOjZtloP8tuH6LMiiqTyMLlwSW0QCF7/view?usp=drive_link"],
+                    ["4.", "https://drive.google.com/file/d/1tVr-5oEINpDkJ1nZvjw3EyrWQPRcFsrM/view?usp=drive_link"],
+                    ["5.", "https://drive.google.com/file/d/1QHiQqc5d9u2AAqrAt7mKHmtAnxoVvRIH/view?usp=drive_link"],
+                    ["6.", "https://drive.google.com/file/d/1Mu6XC9lgBBF3GRa-Cb6TTxaXHIU-sPt6/view?usp=drive_link"],
+                    ["7.", "https://drive.google.com/file/d/1ssawGEGZp5kf4dgUqCaRryFw0jXC1hWQ/view?usp=drive_link"],
+                    ["8.", "https://drive.google.com/file/d/1N6z-6vW1fOAWIFBnC7poVT20oDkjAbFX/view?usp=drive_link"],
+                    ["9.", "https://drive.google.com/file/d/1tdEv5kKfX5JRU0Hu9fmzjAS48meKUmqc/view?usp=drive_link"],
+                    ["10.", "https://drive.google.com/file/d/1NK3xCFqgmu439wzVuoiABnAWMgQ0qq21/view?usp=drive_link"],
+                    ["11.", "https://drive.google.com/file/d/1h_Y0nN5y7hJl3dCVxP7Wei04BdU26aQd/view?usp=drive_link"],
+                    ["12.", "https://drive.google.com/file/d/1vVa034F4Ndb12onpkFp1FdgRB8Bd1XmX/view?usp=drive_link"],
+                    ["13.", "https://drive.google.com/file/d/1aO3P6I3HvwrA8VLXyDfwnzjIBU_z8Xix/view?usp=drive_link"],
+                    ["14.", "https://drive.google.com/file/d/123bABL-vk61nWZpa5BCKmwJqg7QeO8ak/view?usp=drive_link"],
+                    ["15.", "https://drive.google.com/file/d/1E_zGZQDaodeUuYF2B1jVN0Szh3mheNe4/view?usp=drive_link"],
+                    ["16.", "https://drive.google.com/file/d/1xoYtBVBkEAMA-ByFxhKT9aWxntZ5sVU6/view?usp=drive_link"],
+                    ["17.", "https://drive.google.com/file/d/1c32eYKNyyie_a1L0BALbfdBlk4VALMDy/view?usp=drive_link"],
+                    ["18.", "https://drive.google.com/file/d/1eMPGLkJjnFA6AZuMfycoz1vanLkeGKvk/view?usp=drive_link"],
+                    ["19.", "https://drive.google.com/file/d/1E7_1YPw51RZ_snSVJpkiuniXlE59xJpo/view?usp=drive_link"],
+                    ["20.", "https://drive.google.com/file/d/1-sot_8iGu4C8O7Ro2ftnemW8sjH6Gi-Y/view?usp=drive_link"],
+                ]
+            },
+            {
+                name: "Trees",
+                icon: "🌳",
+                description: "Tree structures and traversals",
+                subtopics: [
+                    ["1.", "https://drive.google.com/file/d/1Y91YfwlxSaPIjGXGTeanpfL5tXutYUKE/view?usp=drive_link"],
+                    ["2.", "https://drive.google.com/file/d/14Wpxlhmkk_0HwEEezLDEn7TyNKxoVh91/view?usp=drive_link"],
+                    ["3.", "https://drive.google.com/file/d/1b2bmvs5PY04lcnV899bQlAoCwakhiro3/view?usp=drive_link"],
+                    ["4.", "https://drive.google.com/file/d/1oByhlfwyBNUtaP3O6D--S9nc0uxjhaMz/view?usp=drive_link"],
+                    ["5.", "https://drive.google.com/file/d/194E2vIi0bxK-uP3nYf1cYDynT7OljhUW/view?usp=drive_link"],
+                    ["6.", "https://drive.google.com/file/d/1ERhJtRMUDKgy1xqVk41MAnDJ8ltCCQPS/view?usp=drive_link"],
+                     ["7.", "https://drive.google.com/file/d/1ERQVuZBPttvY126Mjsm67OxRJEQRgyWv/view?usp=drive_link"],
+                    ["8.", "https://drive.google.com/file/d/1yXBl1ZCx7-vkmc55Q_YbWRWJZPmXr1OF/view?usp=drive_link"],
+                    ["9.", "https://drive.google.com/file/d/1DYff0Nda0O-ODZtZJhoUQdUZ-fuJ88VJ/view?usp=drive_link"],
+                    ["10.", "https://drive.google.com/file/d/1Es4JmJPWd0UgPWxqTtSRd6QwEp59J_-j/view?usp=drive_link"],
+                    ["11.", "https://drive.google.com/file/d/1Zm4GjAUn7E0aKD_4QQAiQZtwj6nou5pW/view?usp=drive_link"],
+                    ["12.", "https://drive.google.com/file/d/1hcBbcH90cq_WY5NS0Zvla3GwaFH25S1q/view?usp=drive_link"],
+                     ["13.", "https://drive.google.com/file/d/1ExLDINhW3hZyh6feZaBnkpwKqdhLW8oR/view?usp=drive_link"],
+                    ["14.", "https://drive.google.com/file/d/1GeYaehDF0f2TIaRvok1XxZrQSxinfpDn/view?usp=drive_link"],
+                    ["15.", "https://drive.google.com/file/d/1UI32AoYxDMgGzOzKWIGS1SA_CGMXUzQN/view?usp=drive_link"],
+                    ["16.", "https://drive.google.com/file/d/1-BMZI8bs1nVxfq6G6umiD1hCYoUuaSHH/view?usp=drive_link"],
+                    ["17.", "https://drive.google.com/file/d/1D1k2mOuZIIzIfM0ta9IR_ddHgARWVrnq/view?usp=drive_link"],
+                    ["18.", "https://drive.google.com/file/d/1a8AbUyPxu3TSPd2C5mAbKwrBS97EwMbY/view?usp=drive_link"],
+                     ["19.", "https://drive.google.com/file/d/1Mu6_uM9A1efq5glj2YeMei9yg4SH_4yL/view?usp=drive_link"],
+                    ["20.", "https://drive.google.com/file/d/1lt_DcCiC14xqSBwM8HrTtajLuIXZS0NT/view?usp=drive_link"],
+                    
+                ]
+            },
+            {
+                name: "Graphs",
+                icon: "🕸️",
+                description: "Graph algorithms and operations",
+                subtopics: [
+                    ["1.", "https://drive.google.com/file/d/1Ee96i-gJVJk1xpERCcpBSl4jCfFxCVcH/view?usp=drive_link"],
+                    ["2.", "https://drive.google.com/file/d/1UbpH-dy0Q_L49n2zcImd7g3zYbPGGVn2/view?usp=drive_link"],
+                    ["3.", "https://drive.google.com/file/d/19SBnMoLL9piriwW2L4_lPGGxaivo3dpr/view?usp=drive_link"],
+                    ["4.", "https://drive.google.com/file/d/1oglFcAGh8KnSkBBukzPedxslqJUBkE4o/view?usp=drive_link"],
+                    ["5.", "https://drive.google.com/file/d/1XkX1lL572xnw7zMGJ78n7p-bJRCmmH4y/view?usp=drive_link"],
+                    ["6.", "https://drive.google.com/file/d/1L5T94e6TvwF3OZDktwjg6LIVr5dX0eiq/view?usp=drive_link"],
+                    
+                ]
+            },
+            {
+                name: "Searching Algorithm",
+                icon: "🔎",
+                description: "Find elements efficiently",
+                subtopics: [
+                    ["1.", "https://drive.google.com/file/d/12scoAof4Jie1NI8a6ePxwpAT_E7z8_Ce/view?usp=drive_link"],
+                    ["2.", "https://drive.google.com/file/d/1PEm_F5NTZ2KYEaTZL17jp8_QIXUqzjDy/view?usp=drive_link"],
+                    ["3.", "https://drive.google.com/file/d/1t0_AAkI3iYTfFMAUR43BusnlR__5GA8Y/view?usp=drive_link"],
+                     ["4.", "https://drive.google.com/file/d/1rCZPPlv7MMIphIuWMcJAIL-lN_qe9FmO/view?usp=drive_link"],
+                    ["5.", "https://drive.google.com/file/d/1CdJnb3PBZYlWJ1sC5TVk0CaREPUABR7g/view?usp=drive_link"],
+                    ["6.", "https://drive.google.com/file/d/1HTNb3LRGzX7kvgxCJjOOlPpkqfWewPq8/view?usp=drive_link"],
+                     ["7.", "https://drive.google.com/file/d/1g0NW0kIZddjBljNH3RmR7sF98Hfe5t_I/view?usp=drive_link"],
+                    ["8.", "https://drive.google.com/file/d/1IZF16XhWWNgNk_RmuxZkb4x0ug8yebW6/view?usp=drive_link"],
+                    ["9.", "https://drive.google.com/file/d/1xAjxF5ju9ci-tGsulKVScsuAsxTm0SCV/view?usp=drive_link"],
+                     ["10.", "https://drive.google.com/file/d/1XI6dURuELBD4FRqUyxANMx8eiZDjU2Ym/view?usp=drive_link"],
+                    
+                ]
+            },
+            {
+                name: "Sorting Algorithm",
+                icon: "📈",
+                description: "Sorting algorithms",
+                subtopics: [
+                    ["1.", "https://drive.google.com/file/d/1I1Q55joTHz2BskAN097ukqaIQKMbgyQO/view?usp=drive_link"],
+                    ["2.", "https://drive.google.com/file/d/1CrhLMi8lWoq8GYz9Hxfed7h61rqdpBbz/view?usp=drive_link"],
+                    ["3.", "https://drive.google.com/file/d/13lvLEGvKM4lh_QzM1B0X1_aqLN4q_Ak9/view?usp=drive_link"],
+                    ["4.", "https://drive.google.com/file/d/10sg83_maqTuiaL95m76v6o31CXTcF3ae/view?usp=drive_link"],
+                    ["5.", "https://drive.google.com/file/d/1LFixE_sL9I5YWW4dwfw_2QpeiCyd96tq/view?usp=drive_link"],
+                     ["6.", "https://drive.google.com/file/d/13MTUpwDegBN_bgHR6pMGSypr0DQkMYYj/view?usp=drive_link"],
+                    ["7.", "https://drive.google.com/file/d/14QvE18cjWlk4VBmGfsTh5uIjl-1bjSHD/view?usp=drive_link"],
+                    ["8.", "https://drive.google.com/file/d/16XExAt03wqzojZocHaAoETkexMmtrrMP/view?usp=drive_link"],
+                    ["9.", "https://drive.google.com/file/d/1S9j5tXFhet54XvozV4ufNa85ONGsPp2t/view?usp=drive_link"],
+                    ["10.", "https://drive.google.com/file/d/1OIx3kBiojsxqCGVnlqJDsZGPOJxmi4aG/view?usp=drive_link"],
+                     ["11.", "https://drive.google.com/file/d/1X4rCxrTCMCOf87y-lKSqddQzfh0PGKMx/view?usp=drive_link"],
+                    ["12.", "https://drive.google.com/file/d/1ChzHpmhxZAqrmtkMF5G5D-mIR0enX4sk/view?usp=drive_link"],
+                    ["13.", "https://drive.google.com/file/d/1Zf16BXKom4wIWlDDSWMiM6rO6TwVLc6Z/view?usp=drive_link"],
+                    ["14.", "https://drive.google.com/file/d/17uHILsH6SC8MroS5bNo2BQ86yFG5wIlX/view?usp=drive_link"],
+                    ["15.", "https://drive.google.com/file/d/1m9FH_VDnlWlByWN4PEys_X-eyVMX__0m/view?usp=drive_link"],
+                     ["16.", "https://drive.google.com/file/d/1rB6uzdAwbprNwnvxlLioryZUclRpxcfB/view?usp=drive_link"],
+                    ["17.", "https://drive.google.com/file/d/12e3GhcTGuDZVA8luhqCfU6Vy_MosZUC0/view?usp=drive_link"],
+                    ["18.", "https://drive.google.com/file/d/1SkRNP-7Es0F88TN3eICIGkGnllJYwI-m/view?usp=drive_link"],
+                    ["19.", "https://drive.google.com/file/d/1TVBo4ROX3fluQ4key2XjP5_G6oDAPW_c/view?usp=drive_link"],
+                    ["20.", "https://drive.google.com/file/d/178VCKBEdY55Kf9nhDEoRVKt84QyuQKCY/view?usp=drive_link"],
+                ]
+            },
+            {
+                name: "Recursion",
+                icon: "🔄",
+                description: "Functions that call themselves",
+                subtopics: [
+                    ["1.", "https://drive.google.com/file/d/19rFU9E8RuR0pQVO3bN9cufzfoGU5ocIy/view?usp=drive_link"],
+                    ["2.", "https://drive.google.com/file/d/1vDYtORxrjUsRwK7i3htyr2wGcz_7U4oA/view?usp=drive_link"],
+                    ["3.", "https://drive.google.com/file/d/1guld-jHWJQu4tejEkFIW_IdB8N6BbY2l/view?usp=drive_link"],
+                    ["4.", "https://drive.google.com/file/d/1vYOGZI-UpgUclsD5YSsWGyOxn2T12Bdn/view?usp=drive_link"],
+                     ["5.", "https://drive.google.com/file/d/1fmMoLQ9L3z5p5HHljTUN4b_uE2exy2dA/view?usp=drive_link"],
+                    ["6.", "https://drive.google.com/file/d/1le9s9UT89KGyodwITQiYSbdZ09YT7vh7/view?usp=drive_link"],
+                    ["7.", "https://drive.google.com/file/d/1fN-Na5Bt39vrl16DBWzpYVdgbBT_49J0/view?usp=drive_link"],
+                      ["8.", "https://drive.google.com/file/d/1p3YmogVDegPJahAE8UtddYdsfipj9tq5/view?usp=drive_link"],
+                ]
+            },
+            {
+                name: "Multi Dimension Arrays",
+                icon: "🔐",
+                description: "Multi Dimension and Arrays functions",
+                subtopics: [
+                    ["1.", "https://drive.google.com/file/d/1B9O854ii0sSOvRQ959nMibaQNZC0b1Gj/view?usp=drive_link"],
+                    ["2.", "https://drive.google.com/file/d/12JHx-ADI1BxP7qYEFsoqZZqQfiCQ6LHE/view?usp=drive_link"],
+                    ["3.", "https://drive.google.com/file/d/1x-eEAPIRZYMhoKhRnr5zOAK6PGF0ACPy/view?usp=drive_link"],
+                    ["4.", "https://drive.google.com/file/d/1mrhjFujvHQOjr_8Auq2j_upgR3Hl5d15/view?usp=drive_link"],
+                     ["5.", "https://drive.google.com/file/d/1JAx4QAA45DcogeD8YBR1YQEoIElgt6G6/view?usp=drive_link"],
+                    ["6.", "https://drive.google.com/file/d/1azOZN4qO0mZAKzwUSxV9su8glBu-DZ4u/view?usp=drive_link"],
+                    ["7.", "https://drive.google.com/file/d/16pBlnjbiAKbO2G63i7PmY2-AjRThZ4J-/view?usp=drive_link"],
+            
+                ]
+            },
+           
+        ];
+
+        const grid = document.getElementById("topicGrid");
+
+        function displayTopics(list) {
+            grid.innerHTML = "";
+
+            list.forEach((topic, index) => {
+                const card = document.createElement("section");
+                card.className = "topic-card";
+
+                const heading = document.createElement("h2");
+                heading.textContent = topic.icon + " " + topic.name;
+
+                const description = document.createElement("p");
+                description.textContent = topic.description;
+
+                const button = document.createElement("button");
+                button.textContent = "Explore Subtopics ▼";
+                button.setAttribute("aria-expanded", "false");
+
+                const subtopics = document.createElement("div");
+                subtopics.className = "subtopics";
+
+                topic.subtopics.forEach(([name, url]) => {
+                    const link = document.createElement("a");
+                    link.textContent = "➜ " + name;
+                    link.href = url;
+
+                    if (url === "#") {
+                        link.addEventListener("click", function(event) {
+                            event.preventDefault();
+                            alert("Add your tutorial or Google Drive link for: " + name);
+                        });
+                    } else {
+                        link.target = "_blank";
+                        link.rel = "noopener noreferrer";
+                    }
+
+                    subtopics.appendChild(link);
+                });
+
+                button.addEventListener("click", function() {
+                    const isOpen = subtopics.style.display === "block";
+                    subtopics.style.display = isOpen ? "none" : "block";
+                    button.textContent = isOpen
+                        ? "Explore Subtopics ▼"
+                        : "Hide Subtopics ▲";
+                    button.setAttribute("aria-expanded", String(!isOpen));
+                });
+
+                card.appendChild(heading);
+                card.appendChild(description);
+                card.appendChild(button);
+                card.appendChild(subtopics);
+
+                grid.appendChild(card);
+            });
+
+            document.getElementById("emptyMessage").style.display =
+                list.length === 0 ? "block" : "none";
+        }
+
+        function searchTopics() {
+            const query = document
+                .getElementById("search")
+                .value.toLowerCase()
+                .trim();
+
+            const filtered = topics.filter(topic =>
+                topic.name.toLowerCase().includes(query) ||
+                topic.description.toLowerCase().includes(query) ||
+                topic.subtopics.some(subtopic =>
+                    subtopic[0].toLowerCase().includes(query)
+                )
+            );
+
+            displayTopics(filtered);
+        }
+
+        displayTopics(topics);
+    </script>
+
+</body>
+</html>
